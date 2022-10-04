@@ -1,5 +1,5 @@
 {
-  "name": "viewepubjs",
+  "name": "viewepub_psi",
   "version": "1.0.1",
   "description": "Parse and Render Epubs(fchasen@gmail.com)",
   "main": "lib/index.js",
@@ -7,7 +7,7 @@
   "types": "types/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gezerramos/viewepub.js"
+    "url": "https://github.com/Oliveiracorpdev01/viewepub_psi.git"
   },
   "directories": {
     "test": "test"
