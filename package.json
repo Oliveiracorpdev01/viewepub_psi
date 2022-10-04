@@ -1,16 +1,17 @@
 {
   "name": "viewepub_psi",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Parse and Render Epubs(fchasen@gmail.com)",
   "main": "lib/index.js",
   "module": "src/index.js",
   "types": "types/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Oliveiracorpdev01/viewepub_psi.git"
+    "url": "git+https://github.com/Oliveiracorpdev01/viewepub_psi.git"
   },
   "directories": {
-    "test": "test"
+    "example": "examples",
+    "lib": "lib"
   },
   "scripts": {
     "test": "karma start --single-run --browsers ChromeHeadlessNoSandbox",
@@ -67,5 +68,10 @@
     "lodash": "^4.17.21",
     "marks-pane": "^1.0.9",
     "path-webpack": "0.0.3"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/Oliveiracorpdev01/viewepub_psi/issues"
+  },
+  "homepage": "https://github.com/Oliveiracorpdev01/viewepub_psi#readme",
+  "keywords": []
 }
