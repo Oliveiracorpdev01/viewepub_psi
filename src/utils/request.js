@@ -72,7 +72,7 @@ function request(url, type, withCredentials, headers) {
 		deferred.reject(e);
 	}
 
-	function handler() {
+	function handler() {		
 		if (this.readyState === XMLHttpRequest.DONE) {
 			var responseXML = false;
 
@@ -80,9 +80,9 @@ function request(url, type, withCredentials, headers) {
 				responseXML = this.responseXML;
 			}
 			if (this.status === 200 || this.status === 0 || responseXML) { //-- Firefox is reporting 0 for blob urls
-				var r;
+				var r;				
 
-				if (this.status === 0) {
+				if (this.status == 0) {
 					window.location.href = "/"
 				}
 

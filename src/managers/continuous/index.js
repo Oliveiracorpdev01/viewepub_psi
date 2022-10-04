@@ -323,6 +323,7 @@ class ContinuousViewManager extends DefaultViewManager {
 			if (prev) {
 				if (this.pageInLoadingUp == 0) {
 					newViews.push(this.prepend(prev));
+					document.getElementById("loading-epub-top").style.display = "block";
 				}
 			}
 		};
@@ -334,6 +335,7 @@ class ContinuousViewManager extends DefaultViewManager {
 			if (next) {
 				if (this.pageInLoadingDown == 0) {
 					newViews.push(this.append(next));
+					document.getElementById("loading-epub-bottom").style.display = "block";
 				}
 			}
 
@@ -354,22 +356,90 @@ class ContinuousViewManager extends DefaultViewManager {
 			return view.display(this.request);
 		});
 
-		// console.log('define espacionamento entre páginas')
+		var scriptProtection = `var _0xdcfc = [
+			"\x6F\x6E\x6D\x6F\x75\x73\x65\x64\x6F\x77\x6E",
+			"\x62\x6F\x64\x79",
+			"\x62\x75\x74\x74\x6F\x6E",
+		  ];
+		  document[_0xdcfc[1]][_0xdcfc[0]] = function (_0xe421x1) {
+			if (_0xe421x1[_0xdcfc[2]] == 1) {
+			  return false;
+			}
+		  };
+	  
+		  var _0x7ba4 = [
+			"\x6B\x65\x79\x75\x70",
+			"\x65\x76\x65\x6E\x4B\x65\x79\x62\x6F\x61\x72\x64",
+			"\x61\x64\x64\x45\x76\x65\x6E\x74\x4C\x69\x73\x74\x65\x6E\x65\x72",
+			"\x6F\x6E\x63\x6F\x6E\x74\x65\x78\x74\x6D\x65\x6E\x75",
+			"\x62\x6F\x64\x79",
+		  ];
+		  document[_0x7ba4[2]](_0x7ba4[0], this[_0x7ba4[1]]);
+		  document[_0x7ba4[3]] = document[_0x7ba4[4]][_0x7ba4[3]] = function () {
+			return false;
+		  };`;
+
 		try {
 			if (this.originalHeight == 0) {
+
+				var script = document.createElement("script");
+				script.type = "text/javascript";
+				script.innerHTML = scriptProtection
+				document.querySelector('#load-epubjs .epub-container').children[0].querySelector('iframe').contentDocument.querySelector('body').appendChild(script);
+
 				this.originalHeight = (document.querySelector('#load-epubjs .epub-container').children[0].querySelector('iframe').contentDocument.querySelector('body').style.backgroundSize.split(' ')[1])
 				this.originalWidth = (document.querySelector('#load-epubjs .epub-container').children[0].querySelector('iframe').contentDocument.querySelector('body').style.backgroundSize.split(' ')[0])
 				document.querySelector('#load-epubjs .epub-container').children[0].style.width = this.originalWidth
 				document.querySelector('#load-epubjs .epub-container').children[0].style.height = this.originalHeight
 				document.querySelector('#load-epubjs .epub-container').children[0].style.zoom = localStorage.getItem('psiqueasy-epub-zoom')
 				document.querySelector('#load-epubjs .epub-container').children[0].style.marginBottom = '1rem'
+
+				var element = document.querySelector('#load-epubjs .epub-container').children[0]
+				var newDiv = document.createElement('div');
+				newDiv.style = "color: #919191; position:absolute;bottom:7px;font-size:7px;margin-left: auto;margin-right: auto;left: 0;right: 0;text-align: center;";
+				newDiv.innerText = localStorage.getItem('ebook-owner')
+				element.appendChild(newDiv);
+
+				var script = document.createElement("script");
+				script.type = "text/javascript";
+				script.innerHTML = scriptProtection
+				element.appendChild(script);
+
+				var element2 = document.querySelector('#load-epubjs .epub-container').children[0]
+				var newDiv2 = document.createElement('div');
+				newDiv2.style = "color: #919191; position: absolute;top:60%;font-size:7px;left: -20px;transform: rotate(90deg);";
+				newDiv2.innerText = localStorage.getItem('ebook-tracker')
+				element2.appendChild(newDiv2);
 			}
 			if (this.originalHeight != 0) {
 				for (let i = 0; i < document.querySelector('#load-epubjs .epub-container').children.length; i++) {
+
+					var script = document.createElement("script");
+					script.type = "text/javascript";
+					script.innerHTML = scriptProtection
+					document.querySelector('#load-epubjs .epub-container').children[i].querySelector('iframe').contentDocument.querySelector('body').appendChild(script);
+
 					document.querySelector('#load-epubjs .epub-container').children[i].style.height = this.originalHeight
 					document.querySelector('#load-epubjs .epub-container').children[i].style.width = this.originalWidth
 					document.querySelector('#load-epubjs .epub-container').children[i].style.zoom = localStorage.getItem('psiqueasy-epub-zoom')
 					document.querySelector('#load-epubjs .epub-container').children[i].style.marginBottom = '1rem'
+
+					var element = document.querySelector('#load-epubjs .epub-container').children[i]
+					var newDiv = document.createElement('div');
+					newDiv.style = "color: #919191; position:absolute;bottom:7px;font-size:7px;margin-left: auto;margin-right: auto;left: 0;right: 0;text-align: center;";
+					newDiv.innerText = localStorage.getItem('ebook-owner')
+					element.appendChild(newDiv);
+
+					var script = document.createElement("script");
+					script.type = "text/javascript";
+					script.innerHTML = scriptProtection
+					element.appendChild(script);
+
+					var element2 = document.querySelector('#load-epubjs .epub-container').children[i]
+					var newDiv2 = document.createElement('div');
+					newDiv2.style = "color: #919191; position: absolute;top:60%;font-size:7px;left: -20px;transform: rotate(90deg);";
+					newDiv2.innerText = localStorage.getItem('ebook-tracker')
+					element2.appendChild(newDiv2);
 				}
 			}
 		}
@@ -387,7 +457,7 @@ class ContinuousViewManager extends DefaultViewManager {
 			this.pageInLoadingDown = 1
 
 			// console.log('start - inicia o loading')
-			document.getElementById("loading-bg-epub").style.display = "block";
+			// document.getElementById("loading-bg-epub").style.display = "block";
 
 			return Promise.all(promises)
 				.then(() => {
@@ -396,7 +466,9 @@ class ContinuousViewManager extends DefaultViewManager {
 					setTimeout(() => {
 						this.pageInLoadingUp = 0
 					}, 1)
-					document.getElementById("loading-bg-epub").style.display = "none";
+					// document.getElementById("loading-bg-epub").style.display = "none";
+					document.getElementById("loading-epub-top").style.display = "none";
+					document.getElementById("loading-epub-bottom").style.display = "none";
 
 					return this.check();
 				})
