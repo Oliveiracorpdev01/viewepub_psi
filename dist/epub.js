@@ -7,7 +7,7 @@
 		exports["ePub"] = factory(require("JSZip"));
 	else
 		root["ePub"] = factory(root["JSZip"]);
-})(window, function(__WEBPACK_EXTERNAL_MODULE__30__) {
+})(window, function(__WEBPACK_EXTERNAL_MODULE__29__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -91,7 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 31);
+/******/ 	return __webpack_require__(__webpack_require__.s = 30);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -2113,8 +2113,8 @@ class EpubCFI {
 "use strict";
 
 
-var d        = __webpack_require__(32)
-  , callable = __webpack_require__(49)
+var d        = __webpack_require__(31)
+  , callable = __webpack_require__(45)
 
   , apply = Function.prototype.apply, call = Function.prototype.call
   , create = Object.create, defineProperty = Object.defineProperty
@@ -3580,7 +3580,7 @@ var mapping = __webpack_require__(11);
 var queue = __webpack_require__(9);
 
 // EXTERNAL MODULE: ./node_modules/lodash/throttle.js
-var throttle = __webpack_require__(29);
+var throttle = __webpack_require__(28);
 var throttle_default = /*#__PURE__*/__webpack_require__.n(throttle);
 
 // CONCATENATED MODULE: ./src/managers/helpers/stage.js
@@ -6727,8 +6727,7 @@ class Contents {
     // background images are not scaled by transform
 
     this.css("background-size", viewportWidth * scale + "px " + viewportHeight * scale + "px");
-    this.css("background-color", "white");
-    this.css("zoom", localStorage.getItem('psiqueasy-epub-zoom'));
+    this.css("background-color", "transparent");
 
     if (section && section.properties.includes("page-spread-left")) {
       // set margin since scale is weird
@@ -6860,11 +6859,11 @@ var _get = function get(object, property, receiver) { if (object === null) objec
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _svg = __webpack_require__(53);
+var _svg = __webpack_require__(49);
 
 var _svg2 = _interopRequireDefault(_svg);
 
-var _events = __webpack_require__(54);
+var _events = __webpack_require__(50);
 
 var _events2 = _interopRequireDefault(_events);
 
@@ -7325,10 +7324,10 @@ exports.NAMESPACE = NAMESPACE;
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var dom = __webpack_require__(26)
+var dom = __webpack_require__(25)
 exports.DOMImplementation = dom.DOMImplementation
 exports.XMLSerializer = dom.XMLSerializer
-exports.DOMParser = __webpack_require__(50).DOMParser
+exports.DOMParser = __webpack_require__(46).DOMParser
 
 
 /***/ }),
@@ -9320,9 +9319,11 @@ module.exports = g;
 "use strict";
 
 
-var _undefined = __webpack_require__(43)(); // Support ES3 engines
+var _undefined = __webpack_require__(38)(); // Support ES3 engines
 
-module.exports = function (val) { return val !== _undefined && val !== null; };
+module.exports = function (val) {
+ return (val !== _undefined) && (val !== null);
+};
 
 
 /***/ }),
@@ -10180,8 +10181,8 @@ event_emitter__WEBPACK_IMPORTED_MODULE_0___default()(IframeView.prototype);
 /***/ (function(module, exports, __webpack_require__) {
 
 var isObject = __webpack_require__(19),
-    now = __webpack_require__(55),
-    toNumber = __webpack_require__(57);
+    now = __webpack_require__(51),
+    toNumber = __webpack_require__(53);
 
 /** Error message constants. */
 var FUNC_ERROR_TEXT = 'Expected a function';
@@ -10733,17 +10734,7 @@ var debounce_default = /*#__PURE__*/__webpack_require__.n(debounce);
 class continuous_ContinuousViewManager extends managers_default["a" /* default */] {
   constructor(options) {
     super(options);
-    this.name = "continuous"; //variavel que controla o loading
-
-    this.loadingValue = 0; //altura original da página
-
-    this.originalHeight = 0;
-    this.originalWidth = 0; //Página em loading
-
-    this.pageInLoadingUp = 0;
-    this.pageInLoadingDown = 0; //Refresh na página
-
-    this.refreshPage = 300;
+    this.name = "continuous";
     this.settings = Object(core["extend"])(this.settings || {}, {
       infinite: true,
       overflow: undefined,
@@ -10852,9 +10843,6 @@ class continuous_ContinuousViewManager extends managers_default["a" /* default *
 
   append(section) {
     var view = this.createView(section);
-    const currentDate = new Date();
-    const timestamp = currentDate.getTime();
-    this.loadingValue = timestamp;
     view.on(constants["c" /* EVENTS */].VIEWS.RESIZED, bounds => {
       view.expanded = true;
     });
@@ -10871,9 +10859,6 @@ class continuous_ContinuousViewManager extends managers_default["a" /* default *
 
   prepend(section) {
     var view = this.createView(section);
-    const currentDate = new Date();
-    const timestamp = currentDate.getTime();
-    this.loadingValue = timestamp;
     view.on(constants["c" /* EVENTS */].VIEWS.RESIZED, bounds => {
       this.counter(bounds);
       view.expanded = true;
@@ -10891,16 +10876,11 @@ class continuous_ContinuousViewManager extends managers_default["a" /* default *
 
   counter(bounds) {
     if (this.settings.axis === "vertical") {
-      let heightDelta = 3;
-      let compare = localStorage.getItem('psiqueasy-epub-heightDelta');
-
-      if (compare == 'true') {
-        heightDelta = bounds.heightDelta;
-        localStorage.setItem('psiqueasy-epub-heightDelta', false);
+      if (this.settings.manager == "continuous") {
+        this.scrollBy(0, 50, true);
+      } else {
+        this.scrollBy(0, bounds.heightDelta, true);
       }
-
-      this.scrollBy(0, heightDelta, true);
-      heightDelta = 3;
     } else {
       this.scrollBy(bounds.widthDelta, 0, true);
     }
@@ -10935,13 +10915,13 @@ class continuous_ContinuousViewManager extends managers_default["a" /* default *
         }
 
         visible.push(view);
-      } else {//desativada a remoção de páginas
-        // this.q.enqueue(view.destroy.bind(view));
-        // console.log("hidden " + view.index, view.displayed);
-        // clearTimeout(this.trimTimeout);
-        // this.trimTimeout = setTimeout(function () {
-        // 	this.q.enqueue(this.trim.bind(this));
-        // }.bind(this), 250);
+      } else {
+        this.q.enqueue(view.destroy.bind(view)); // console.log("hidden " + view.index, view.displayed);
+
+        clearTimeout(this.trimTimeout);
+        this.trimTimeout = setTimeout(function () {
+          this.q.enqueue(this.trim.bind(this));
+        }.bind(this), 250);
       }
     }
 
@@ -11000,10 +10980,7 @@ class continuous_ContinuousViewManager extends managers_default["a" /* default *
       let prev = first && first.section.prev();
 
       if (prev) {
-        if (this.pageInLoadingUp == 0) {
-          newViews.push(this.prepend(prev));
-          document.getElementById("loading-epub-top").style.display = "block";
-        }
+        newViews.push(this.prepend(prev));
       }
     };
 
@@ -11012,10 +10989,7 @@ class continuous_ContinuousViewManager extends managers_default["a" /* default *
       let next = last && last.section.next();
 
       if (next) {
-        if (this.pageInLoadingDown == 0) {
-          newViews.push(this.append(next));
-          document.getElementById("loading-epub-bottom").style.display = "block";
-        }
+        newViews.push(this.append(next));
       }
     };
 
@@ -11033,104 +11007,9 @@ class continuous_ContinuousViewManager extends managers_default["a" /* default *
     let promises = newViews.map(view => {
       return view.display(this.request);
     });
-    var scriptProtection = `var _0xdcfc = [
-			"\x6F\x6E\x6D\x6F\x75\x73\x65\x64\x6F\x77\x6E",
-			"\x62\x6F\x64\x79",
-			"\x62\x75\x74\x74\x6F\x6E",
-		  ];
-		  document[_0xdcfc[1]][_0xdcfc[0]] = function (_0xe421x1) {
-			if (_0xe421x1[_0xdcfc[2]] == 1) {
-			  return false;
-			}
-		  };
-	  
-		  var _0x7ba4 = [
-			"\x6B\x65\x79\x75\x70",
-			"\x65\x76\x65\x6E\x4B\x65\x79\x62\x6F\x61\x72\x64",
-			"\x61\x64\x64\x45\x76\x65\x6E\x74\x4C\x69\x73\x74\x65\x6E\x65\x72",
-			"\x6F\x6E\x63\x6F\x6E\x74\x65\x78\x74\x6D\x65\x6E\x75",
-			"\x62\x6F\x64\x79",
-		  ];
-		  document[_0x7ba4[2]](_0x7ba4[0], this[_0x7ba4[1]]);
-		  document[_0x7ba4[3]] = document[_0x7ba4[4]][_0x7ba4[3]] = function () {
-			return false;
-		  };`;
-
-    try {
-      if (this.originalHeight == 0) {
-        var script = document.createElement("script");
-        script.type = "text/javascript";
-        script.innerHTML = scriptProtection;
-        document.querySelector('#load-epubjs .epub-container').children[0].querySelector('iframe').contentDocument.querySelector('body').appendChild(script);
-        this.originalHeight = document.querySelector('#load-epubjs .epub-container').children[0].querySelector('iframe').contentDocument.querySelector('body').style.backgroundSize.split(' ')[1];
-        this.originalWidth = document.querySelector('#load-epubjs .epub-container').children[0].querySelector('iframe').contentDocument.querySelector('body').style.backgroundSize.split(' ')[0];
-        document.querySelector('#load-epubjs .epub-container').children[0].style.width = this.originalWidth;
-        document.querySelector('#load-epubjs .epub-container').children[0].style.height = this.originalHeight;
-        document.querySelector('#load-epubjs .epub-container').children[0].style.zoom = localStorage.getItem('psiqueasy-epub-zoom');
-        document.querySelector('#load-epubjs .epub-container').children[0].style.marginBottom = '1rem';
-        var element = document.querySelector('#load-epubjs .epub-container').children[0];
-        var newDiv = document.createElement('div');
-        newDiv.style = "color: #919191; position:absolute;bottom:7px;font-size:7px;margin-left: auto;margin-right: auto;left: 0;right: 0;text-align: center;";
-        newDiv.innerText = localStorage.getItem('ebook-owner');
-        element.appendChild(newDiv);
-        var script = document.createElement("script");
-        script.type = "text/javascript";
-        script.innerHTML = scriptProtection;
-        element.appendChild(script);
-        var element2 = document.querySelector('#load-epubjs .epub-container').children[0];
-        var newDiv2 = document.createElement('div');
-        newDiv2.style = "color: #919191; position: absolute;top:60%;font-size:7px;left: -20px;transform: rotate(90deg);";
-        newDiv2.innerText = localStorage.getItem('ebook-tracker');
-        element2.appendChild(newDiv2);
-      }
-
-      if (this.originalHeight != 0) {
-        for (let i = 0; i < document.querySelector('#load-epubjs .epub-container').children.length; i++) {
-          var script = document.createElement("script");
-          script.type = "text/javascript";
-          script.innerHTML = scriptProtection;
-          document.querySelector('#load-epubjs .epub-container').children[i].querySelector('iframe').contentDocument.querySelector('body').appendChild(script);
-          document.querySelector('#load-epubjs .epub-container').children[i].style.height = this.originalHeight;
-          document.querySelector('#load-epubjs .epub-container').children[i].style.width = this.originalWidth;
-          document.querySelector('#load-epubjs .epub-container').children[i].style.zoom = localStorage.getItem('psiqueasy-epub-zoom');
-          document.querySelector('#load-epubjs .epub-container').children[i].style.marginBottom = '1rem';
-          var element = document.querySelector('#load-epubjs .epub-container').children[i];
-          var newDiv = document.createElement('div');
-          newDiv.style = "color: #919191; position:absolute;bottom:7px;font-size:7px;margin-left: auto;margin-right: auto;left: 0;right: 0;text-align: center;";
-          newDiv.innerText = localStorage.getItem('ebook-owner');
-          element.appendChild(newDiv);
-          var script = document.createElement("script");
-          script.type = "text/javascript";
-          script.innerHTML = scriptProtection;
-          element.appendChild(script);
-          var element2 = document.querySelector('#load-epubjs .epub-container').children[i];
-          var newDiv2 = document.createElement('div');
-          newDiv2.style = "color: #919191; position: absolute;top:60%;font-size:7px;left: -20px;transform: rotate(90deg);";
-          newDiv2.innerText = localStorage.getItem('ebook-tracker');
-          element2.appendChild(newDiv2);
-        }
-      }
-    } catch (err) {// console.log(err)
-    }
 
     if (newViews.length) {
-      if (this.refreshPage <= 0) {
-        document.location.reload();
-      }
-
-      this.pageInLoadingUp = 1;
-      this.pageInLoadingDown = 1; // console.log('start - inicia o loading')
-      // document.getElementById("loading-bg-epub").style.display = "block";
-
       return Promise.all(promises).then(() => {
-        this.refreshPage--;
-        this.pageInLoadingDown = 0;
-        setTimeout(() => {
-          this.pageInLoadingUp = 0;
-        }, 1); // document.getElementById("loading-bg-epub").style.display = "none";
-
-        document.getElementById("loading-epub-top").style.display = "none";
-        document.getElementById("loading-epub-bottom").style.display = "none";
         return this.check();
       }).then(() => {
         // Check to see if anything new is on screen after rendering
@@ -14296,10 +14175,6 @@ function request_request(url, type, withCredentials, headers) {
         //-- Firefox is reporting 0 for blob urls
         var r;
 
-        if (this.status == 0) {
-          window.location.href = "/";
-        }
-
         if (!this.response && !responseXML) {
           deferred.reject({
             status: this.status,
@@ -17023,7 +16898,7 @@ class pagelist_PageList {
 var rendition = __webpack_require__(16);
 
 // EXTERNAL MODULE: external "JSZip"
-var external_JSZip_ = __webpack_require__(30);
+var external_JSZip_ = __webpack_require__(29);
 var external_JSZip_default = /*#__PURE__*/__webpack_require__.n(external_JSZip_);
 
 // CONCATENATED MODULE: ./src/archive.js
@@ -18491,19 +18366,6 @@ event_emitter_default()(book_Book.prototype);
 
 /***/ }),
 /* 25 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-// ES3 safe
-var _undefined = void 0;
-
-module.exports = function (value) { return value !== _undefined && value !== null; };
-
-
-/***/ }),
-/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var conventions = __webpack_require__(14);
@@ -20009,10 +19871,10 @@ try{
 
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var freeGlobal = __webpack_require__(56);
+var freeGlobal = __webpack_require__(52);
 
 /** Detect free variable `self`. */
 var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
@@ -20024,10 +19886,10 @@ module.exports = root;
 
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(27);
+var root = __webpack_require__(26);
 
 /** Built-in value references. */
 var Symbol = root.Symbol;
@@ -20036,7 +19898,7 @@ module.exports = Symbol;
 
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var debounce = __webpack_require__(21),
@@ -20111,13 +19973,13 @@ module.exports = throttle;
 
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__30__;
+module.exports = __WEBPACK_EXTERNAL_MODULE__29__;
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20167,43 +20029,44 @@ ePub.utils = _utils_core__WEBPACK_IMPORTED_MODULE_4__;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17)))
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var isValue         = __webpack_require__(25)
-  , isPlainFunction = __webpack_require__(33)
-  , assign          = __webpack_require__(37)
-  , normalizeOpts   = __webpack_require__(45)
-  , contains        = __webpack_require__(46);
+var assign        = __webpack_require__(32)
+  , normalizeOpts = __webpack_require__(40)
+  , isCallable    = __webpack_require__(41)
+  , contains      = __webpack_require__(42)
 
-var d = (module.exports = function (dscr, value/*, options*/) {
+  , d;
+
+d = module.exports = function (dscr, value/*, options*/) {
 	var c, e, w, options, desc;
-	if (arguments.length < 2 || typeof dscr !== "string") {
+	if ((arguments.length < 2) || (typeof dscr !== 'string')) {
 		options = value;
 		value = dscr;
 		dscr = null;
 	} else {
 		options = arguments[2];
 	}
-	if (isValue(dscr)) {
-		c = contains.call(dscr, "c");
-		e = contains.call(dscr, "e");
-		w = contains.call(dscr, "w");
-	} else {
+	if (dscr == null) {
 		c = w = true;
 		e = false;
+	} else {
+		c = contains.call(dscr, 'c');
+		e = contains.call(dscr, 'e');
+		w = contains.call(dscr, 'w');
 	}
 
 	desc = { value: value, configurable: c, enumerable: e, writable: w };
 	return !options ? desc : assign(normalizeOpts(options), desc);
-});
+};
 
 d.gs = function (dscr, get, set/*, options*/) {
 	var c, e, options, desc;
-	if (typeof dscr !== "string") {
+	if (typeof dscr !== 'string') {
 		options = set;
 		set = get;
 		get = dscr;
@@ -20211,23 +20074,23 @@ d.gs = function (dscr, get, set/*, options*/) {
 	} else {
 		options = arguments[3];
 	}
-	if (!isValue(get)) {
+	if (get == null) {
 		get = undefined;
-	} else if (!isPlainFunction(get)) {
+	} else if (!isCallable(get)) {
 		options = get;
 		get = set = undefined;
-	} else if (!isValue(set)) {
+	} else if (set == null) {
 		set = undefined;
-	} else if (!isPlainFunction(set)) {
+	} else if (!isCallable(set)) {
 		options = set;
 		set = undefined;
 	}
-	if (isValue(dscr)) {
-		c = contains.call(dscr, "c");
-		e = contains.call(dscr, "e");
-	} else {
+	if (dscr == null) {
 		c = true;
 		e = false;
+	} else {
+		c = contains.call(dscr, 'c');
+		e = contains.call(dscr, 'e');
 	}
 
 	desc = { get: get, set: set, configurable: c, enumerable: e };
@@ -20236,99 +20099,19 @@ d.gs = function (dscr, get, set/*, options*/) {
 
 
 /***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = __webpack_require__(33)()
+	? Object.assign
+	: __webpack_require__(34);
+
+
+/***/ }),
 /* 33 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var isFunction = __webpack_require__(34);
-
-var classRe = /^\s*class[\s{/}]/, functionToString = Function.prototype.toString;
-
-module.exports = function (value) {
-	if (!isFunction(value)) return false;
-	if (classRe.test(functionToString.call(value))) return false;
-	return true;
-};
-
-
-/***/ }),
-/* 34 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var isPrototype = __webpack_require__(35);
-
-module.exports = function (value) {
-	if (typeof value !== "function") return false;
-
-	if (!hasOwnProperty.call(value, "length")) return false;
-
-	try {
-		if (typeof value.length !== "number") return false;
-		if (typeof value.call !== "function") return false;
-		if (typeof value.apply !== "function") return false;
-	} catch (error) {
-		return false;
-	}
-
-	return !isPrototype(value);
-};
-
-
-/***/ }),
-/* 35 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var isObject = __webpack_require__(36);
-
-module.exports = function (value) {
-	if (!isObject(value)) return false;
-	try {
-		if (!value.constructor) return false;
-		return value.constructor.prototype === value;
-	} catch (error) {
-		return false;
-	}
-};
-
-
-/***/ }),
-/* 36 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var isValue = __webpack_require__(25);
-
-// prettier-ignore
-var possibleTypes = { "object": true, "function": true, "undefined": true /* document.all */ };
-
-module.exports = function (value) {
-	if (!isValue(value)) return false;
-	return hasOwnProperty.call(possibleTypes, typeof value);
-};
-
-
-/***/ }),
-/* 37 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = __webpack_require__(38)() ? Object.assign : __webpack_require__(39);
-
-
-/***/ }),
-/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20339,19 +20122,19 @@ module.exports = function () {
 	if (typeof assign !== "function") return false;
 	obj = { foo: "raz" };
 	assign(obj, { bar: "dwa" }, { trzy: "trzy" });
-	return obj.foo + obj.bar + obj.trzy === "razdwatrzy";
+	return (obj.foo + obj.bar + obj.trzy) === "razdwatrzy";
 };
 
 
 /***/ }),
-/* 39 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var keys  = __webpack_require__(40)
-  , value = __webpack_require__(44)
+var keys  = __webpack_require__(35)
+  , value = __webpack_require__(39)
   , max   = Math.max;
 
 module.exports = function (dest, src /*, …srcn*/) {
@@ -20374,17 +20157,19 @@ module.exports = function (dest, src /*, …srcn*/) {
 
 
 /***/ }),
-/* 40 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(41)() ? Object.keys : __webpack_require__(42);
+module.exports = __webpack_require__(36)()
+	? Object.keys
+	: __webpack_require__(37);
 
 
 /***/ }),
-/* 41 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20395,13 +20180,13 @@ module.exports = function () {
 		Object.keys("primitive");
 		return true;
 	} catch (e) {
-		return false;
-	}
+ return false;
+}
 };
 
 
 /***/ }),
-/* 42 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20411,11 +20196,13 @@ var isValue = __webpack_require__(18);
 
 var keys = Object.keys;
 
-module.exports = function (object) { return keys(isValue(object) ? Object(object) : object); };
+module.exports = function (object) {
+	return keys(isValue(object) ? Object(object) : object);
+};
 
 
 /***/ }),
-/* 43 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20426,7 +20213,7 @@ module.exports = function () {};
 
 
 /***/ }),
-/* 44 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20441,7 +20228,7 @@ module.exports = function (value) {
 
 
 /***/ }),
-/* 45 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20468,17 +20255,33 @@ module.exports = function (opts1 /*, …options*/) {
 
 
 /***/ }),
-/* 46 */
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+// Deprecated
+
+
+
+module.exports = function (obj) {
+ return typeof obj === "function";
+};
+
+
+/***/ }),
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(47)() ? String.prototype.contains : __webpack_require__(48);
+module.exports = __webpack_require__(43)()
+	? String.prototype.contains
+	: __webpack_require__(44);
 
 
 /***/ }),
-/* 47 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20488,12 +20291,12 @@ var str = "razdwatrzy";
 
 module.exports = function () {
 	if (typeof str.contains !== "function") return false;
-	return str.contains("dwa") === true && str.contains("foo") === false;
+	return (str.contains("dwa") === true) && (str.contains("foo") === false);
 };
 
 
 /***/ }),
-/* 48 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20501,13 +20304,13 @@ module.exports = function () {
 
 var indexOf = String.prototype.indexOf;
 
-module.exports = function (searchString /*, position*/) {
+module.exports = function (searchString/*, position*/) {
 	return indexOf.call(this, searchString, arguments[1]) > -1;
 };
 
 
 /***/ }),
-/* 49 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20520,13 +20323,13 @@ module.exports = function (fn) {
 
 
 /***/ }),
-/* 50 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var conventions = __webpack_require__(14);
-var dom = __webpack_require__(26)
-var entities = __webpack_require__(51);
-var sax = __webpack_require__(52);
+var dom = __webpack_require__(25)
+var entities = __webpack_require__(47);
+var sax = __webpack_require__(48);
 
 var DOMImplementation = dom.DOMImplementation;
 
@@ -20794,7 +20597,7 @@ exports.XMLSerializer = dom.XMLSerializer;
 
 
 /***/ }),
-/* 51 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var freeze = __webpack_require__(14).freeze;
@@ -21073,7 +20876,7 @@ exports.entityMap = exports.HTML_ENTITIES
 
 
 /***/ }),
-/* 52 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var NAMESPACE = __webpack_require__(14).NAMESPACE;
@@ -21723,7 +21526,7 @@ exports.ParseError = ParseError;
 
 
 /***/ }),
-/* 53 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -21743,7 +21546,7 @@ exports.default = {
 
 
 /***/ }),
-/* 54 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -21878,10 +21681,10 @@ function contains(item, target, x, y) {
 
 
 /***/ }),
-/* 55 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(27);
+var root = __webpack_require__(26);
 
 /**
  * Gets the timestamp of the number of milliseconds that have elapsed since
@@ -21907,7 +21710,7 @@ module.exports = now;
 
 
 /***/ }),
-/* 56 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */
@@ -21918,12 +21721,12 @@ module.exports = freeGlobal;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17)))
 
 /***/ }),
-/* 57 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseTrim = __webpack_require__(58),
+var baseTrim = __webpack_require__(54),
     isObject = __webpack_require__(19),
-    isSymbol = __webpack_require__(60);
+    isSymbol = __webpack_require__(56);
 
 /** Used as references for various `Number` constants. */
 var NAN = 0 / 0;
@@ -21988,10 +21791,10 @@ module.exports = toNumber;
 
 
 /***/ }),
-/* 58 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var trimmedEndIndex = __webpack_require__(59);
+var trimmedEndIndex = __webpack_require__(55);
 
 /** Used to match leading whitespace. */
 var reTrimStart = /^\s+/;
@@ -22013,7 +21816,7 @@ module.exports = baseTrim;
 
 
 /***/ }),
-/* 59 */
+/* 55 */
 /***/ (function(module, exports) {
 
 /** Used to match a single whitespace character. */
@@ -22038,11 +21841,11 @@ module.exports = trimmedEndIndex;
 
 
 /***/ }),
-/* 60 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(61),
-    isObjectLike = __webpack_require__(64);
+var baseGetTag = __webpack_require__(57),
+    isObjectLike = __webpack_require__(60);
 
 /** `Object#toString` result references. */
 var symbolTag = '[object Symbol]';
@@ -22073,12 +21876,12 @@ module.exports = isSymbol;
 
 
 /***/ }),
-/* 61 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(28),
-    getRawTag = __webpack_require__(62),
-    objectToString = __webpack_require__(63);
+var Symbol = __webpack_require__(27),
+    getRawTag = __webpack_require__(58),
+    objectToString = __webpack_require__(59);
 
 /** `Object#toString` result references. */
 var nullTag = '[object Null]',
@@ -22107,10 +21910,10 @@ module.exports = baseGetTag;
 
 
 /***/ }),
-/* 62 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(28);
+var Symbol = __webpack_require__(27);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -22159,7 +21962,7 @@ module.exports = getRawTag;
 
 
 /***/ }),
-/* 63 */
+/* 59 */
 /***/ (function(module, exports) {
 
 /** Used for built-in method references. */
@@ -22187,7 +21990,7 @@ module.exports = objectToString;
 
 
 /***/ }),
-/* 64 */
+/* 60 */
 /***/ (function(module, exports) {
 
 /**
