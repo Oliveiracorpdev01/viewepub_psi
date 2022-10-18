@@ -1,4 +1,4 @@
-# viewEpub.js v1.0
+# viewEpub.js v2.0
 
 ![FuturePress Views](http://fchasen.com/futurepress/fp.png)
 
